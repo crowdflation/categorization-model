@@ -16,7 +16,7 @@ with open("data/label_classes.pickle", "rb") as fp:
     label_classes = pickle.load(fp)
 
 vectorizer = TextVectorization(output_sequence_length=MAX_SEQUENCE_LENGTH, vocabulary=vocab_data)
-model = keras.models.load_model("models/model_saved_1")
+model = keras.models.load_model("data/models/model_saved_1")
 
 def predict(input_text):
     prediction = model.predict(input_text)
