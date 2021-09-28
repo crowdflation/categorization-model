@@ -29,5 +29,5 @@ if __name__ == '__main__':
     assert isinstance(text, str)
     input_text = vectorizer(np.array([[text]])).numpy()
     category = predict(input_text)
-    prediction = {'product_name': text, 'category_prediction': category}
+    prediction = {text: category}
     print(json.dumps(prediction, indent=2))
