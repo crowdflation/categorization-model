@@ -13,11 +13,32 @@ def load_pickle(file_path):
         loaded_file = pickle.load(fp)
     return loaded_file
 
-def predict(input_text):
-    prediction = model.predict(input_text)
-    argm_predict = np.argmax(prediction, axis=1)
-    category = label_classes[argm_predict[0]]
-    return category
+def predict(array_product):
+    prediction_list = []
+    predictions = model.predict(array_product)
+    argm_predicts = np.argmax(predictions, axis=1)
+    for argm_idx in argm_predicts:
+        prediction_list.append(label_classes[argm_idx])
+    return prediction_list
+
+def open_target_file(file_path):
+    product_list = []
+    with open(file_path, 'r') as fp:
+        for line in fp:
+            product_list.append(line.strip())
+    return product_list
+
+def main():
+    output_json = {}
+    target_file_path = sys.argv[1]
+    assert isinstance(target_file_path, str)
+    product_list = open_target_file(target_file_path)
+    input_text = vectorizer(np.array([[product] for product in product_list])).numpy()
+    prediction_list = predict(input_text)
+    for product, prediction in zip(product_list, prediction_list):
+        output_json[product] = prediction
+    print(json.dumps(output_json, indent=2))
+
 
 global label_classes, model
 
@@ -28,9 +49,4 @@ vectorizer = TextVectorization(output_sequence_length=MAX_SEQUENCE_LENGTH, vocab
 model = keras.models.load_model("data/models/model_saved_1")
 
 if __name__ == '__main__':
-    text = sys.argv[1]
-    assert isinstance(text, str)
-    input_text = vectorizer(np.array([[text]])).numpy()
-    category = predict(input_text)
-    prediction = {text: category}
-    print(json.dumps(prediction, indent=2))
+    main()
