@@ -1,0 +1,9 @@
+model:
+    food_bev: data/models/model_food_bev
+    apparel: data/models/model_apparel
+vocab:
+    food_bev: data/vocabs/food_bev_vocab.pickle
+    apparel: data/vocabs/apparel_vocab.pickle
+label_classes:
+    food_bev: data/label_classes/food_bev_label_classes.pickle
+    apparel: data/label_classes/apparel_label_classes.pickle

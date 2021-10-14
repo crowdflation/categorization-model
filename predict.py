@@ -1,19 +1,23 @@
+import argparse
 import json
 import numpy as np
 import pickle
-import sys
+import yaml
 from tensorflow import keras
 from tensorflow.keras.layers import TextVectorization
 
 
 MAX_SEQUENCE_LENGTH = 50
 
-def load_pickle(file_path):
-    with open(file_path, "rb") as fp:
-        loaded_file = pickle.load(fp)
-    return loaded_file
+def load_config():
+    with open("data/config.yaml", "r") as yaml_config:
+        return yaml.safe_load(yaml_config)
 
-def predict(array_product):
+def load_pickle(file_path: str):
+    with open(file_path, "rb") as fp:
+        return pickle.load(fp)
+
+def predict(array_product: np.ndarray):
     prediction_list = []
     predictions = model.predict(array_product)
     argm_predicts = np.argmax(predictions, axis=1)
@@ -21,17 +25,36 @@ def predict(array_product):
         prediction_list.append(label_classes[argm_idx])
     return prediction_list
 
-def open_target_file(file_path):
+def open_target_file(file_path: str):
     product_list = []
     with open(file_path, 'r') as fp:
         for line in fp:
             product_list.append(line.strip())
     return product_list
 
+def init_global_obj(category):
+    config = load_config()
+    global label_classes, model, vectorizer
+    vocab_data = load_pickle(config['vocab'][category])
+    label_classes = load_pickle(config['label_classes'][category])
+    model = keras.models.load_model(config['model'][category])
+    vectorizer = TextVectorization(output_sequence_length=MAX_SEQUENCE_LENGTH,
+                                   vocabulary=vocab_data)
+
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("data", type=str, metavar='path',
+                        help="path to the target file that we want to get predictions from")
+    parser.add_argument("-c", "--category", required=True, type=str,
+                        help="the major category which the input data belong to",
+                        choices=['food_bev','apparel'])
+    args = parser.parse_args()
+
+    category = args.category
+    init_global_obj(category)
+
     output_json = {}
-    target_file_path = sys.argv[1]
-    assert isinstance(target_file_path, str)
+    target_file_path = args.data
     product_list = open_target_file(target_file_path)
     input_text = vectorizer(np.array([[product] for product in product_list])).numpy()
     prediction_list = predict(input_text)
@@ -39,14 +62,6 @@ def main():
         output_json[product] = prediction
     print(json.dumps(output_json, indent=2))
 
-
-global label_classes, model
-
-vocab_data = load_pickle("data/vocab.pickle")
-label_classes = load_pickle("data/label_classes.pickle")
-
-vectorizer = TextVectorization(output_sequence_length=MAX_SEQUENCE_LENGTH, vocabulary=vocab_data)
-model = keras.models.load_model("data/models/model_saved_1")
 
 if __name__ == '__main__':
     main()
