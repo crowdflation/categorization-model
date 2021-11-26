@@ -27,7 +27,7 @@ def predict(array_product: np.ndarray):
 
 def open_target_file(file_path: str):
     product_list = []
-    with open(file_path, 'r') as fp:
+    with open(file_path, 'r', encoding = 'cp850') as fp:
         for line in fp:
             product_list.append(line.strip())
     return product_list
