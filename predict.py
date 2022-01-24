@@ -32,12 +32,12 @@ def open_target_file(file_path: str):
             product_list.append(line.strip())
     return product_list
 
-def init_global_obj(category):
+def init_global_obj(category, lang):
     config = load_config()
     global label_classes, model, vectorizer
-    vocab_data = load_pickle(config['vocab'][category])
-    label_classes = load_pickle(config['label_classes'][category])
-    model = keras.models.load_model(config['model'][category])
+    vocab_data = load_pickle(config['vocab'][lang][category])
+    label_classes = load_pickle(config['label_classes'][lang][category])
+    model = keras.models.load_model(config['model'][lang][category])
     vectorizer = TextVectorization(output_sequence_length=MAX_SEQUENCE_LENGTH,
                                    vocabulary=vocab_data)
 
@@ -48,10 +48,14 @@ def main():
     parser.add_argument("-c", "--category", required=True, type=str,
                         help="the major category which the input data belong to",
                         choices=['food_bev','apparel'])
+    parser.add_argument("-l", "--language", required=True, type=str,
+                        help="the language of the input data",
+                        choices=['en','tr'])
     args = parser.parse_args()
 
     category = args.category
-    init_global_obj(category)
+    language = args.language
+    init_global_obj(category, language)
 
     output_json = {}
     target_file_path = args.data
