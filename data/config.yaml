@@ -1,18 +1,9 @@
 model:
-    en:
-        food_bev: data/models/en/model_food_bev
-        apparel: data/models/en/model_apparel
-    tr:
-        food_bev: data/models/tr/model_food_bev 
+    en: data/models/model_en
+    tr: data/models/model_tr
 vocab:
-    en:
-        food_bev: data/vocabs/en/food_bev_vocab.pickle
-        apparel: data/vocabs/en/apparel_vocab.pickle
-    tr:
-        food_bev: data/vocabs/tr/food_bev_vocab.pickle
+    en: data/vocabs/vocab_en.pickle
+    tr: data/vocabs/vocab_tr.pickle
 label_classes:
-    en:
-        food_bev: data/label_classes/en/food_bev_label_classes.pickle
-        apparel: data/label_classes/en/apparel_label_classes.pickle
-    tr:
-        food_bev: data/label_classes/tr/food_bev_label_classes.pickle
+    en: data/label_classes/label_classes_en.pickle
+    tr: data/label_classes/label_classes_tr.pickle
