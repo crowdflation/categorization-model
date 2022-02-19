@@ -17,6 +17,10 @@ def load_pickle(file_path: str):
     with open(file_path, "rb") as fp:
         return pickle.load(fp)
 
+def load_json(file_path: str):
+    with open(file_path, "r") as fp:
+        return json.load(fp)
+
 def predict(array_product: np.ndarray):
     prediction_list = []
     predictions = model.predict(array_product)
@@ -37,7 +41,7 @@ def init_global_obj(lang):
     config = load_config()
     global label_classes, model, vectorizer
     vocab_data = load_pickle(config['vocab'][lang])
-    label_classes = load_pickle(config['label_classes'][lang])
+    label_classes = load_json(config['label_classes'][lang])
     model = keras.models.load_model(config['model'][lang])
     vectorizer = TextVectorization(output_sequence_length=MAX_SEQUENCE_LENGTH,
                                    vocabulary=vocab_data)

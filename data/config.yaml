@@ -5,5 +5,5 @@ vocab:
     en: data/vocabs/vocab_en.pickle
     tr: data/vocabs/vocab_tr.pickle
 label_classes:
-    en: data/label_classes/label_classes_en.pickle
-    tr: data/label_classes/label_classes_tr.pickle
+    en: data/label_classes/label_classes_en.json
+    tr: data/label_classes/label_classes_tr.json
