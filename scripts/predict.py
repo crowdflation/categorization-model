@@ -8,9 +8,10 @@ from tensorflow.keras.layers import TextVectorization
 
 
 MAX_SEQUENCE_LENGTH = 50
+CONFIG_DEFAULT_PATH = "data/config.yaml"
 
-def load_config():
-    with open("data/config.yaml", "r") as yaml_config:
+def load_config(path: str = CONFIG_DEFAULT_PATH):
+    with open(path, "r") as yaml_config:
         return yaml.safe_load(yaml_config)
 
 def load_pickle(file_path: str):
@@ -58,7 +59,6 @@ def main():
 
     language = args.language
     label_classes, model, vectorizer = init_global_obj(language)
-    #print(model)
 
     output_json = {}
     target_file_path = args.data
