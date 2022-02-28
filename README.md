@@ -1,6 +1,6 @@
 # AI Models for categorization
 
-This repo contains a script to classify raw data into the appropriate categories used for the subsequent calculations.
+This repo contains the code needed to run a server that expose APIs for predictions. We use predictions to classify raw data into the appropriate categories used for the subsequent calculations.
 
 ## Installation
 ```bash
@@ -11,12 +11,15 @@ pip install -r requirements.txt
 
 Example of usage:
 ```bash
-python predict.py products.txt -l en
+uvicorn main:api
 ```
-This example assumes that:
-1. you have a file 'products.txt' with raw data you want to make predictions about.
-2. the examples are in english.
+This command will start the server. 
+There will be a line telling where the app is being served. Default should be on your local machine on port 8000.
 
-Just change the positional argument to whatever the path to your file is. Then use the '-l' flag to indicate the language.
+You can use the "--host" and "--port" flags to set these for your server. For example:
+```bash
+uvicorn main:api --host 0.0.0.0 --port 80
+```
 
-**N.B.** If you're not sure about which values you can use for the '-l' flag, run `python predict.py -h` to have a list of possible choices.
+If you want to take a look at the API docs, you can conveniently head to "{wherever_you_are_serving_the_app}/docs" to explore and even play around with the APIs.
+So, in case of your local machine, that would be "http://127.0.0.1:8000/docs"
